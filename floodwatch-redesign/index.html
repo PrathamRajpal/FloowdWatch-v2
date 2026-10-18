@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FloodWatch: Des Plaines River levels, Lake County IL</title>
+  <meta name="description" content="Live river levels for the Des Plaines River and nearby streams in Lake County, Illinois, explained against NWS flood thresholds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#conditions">Skip to river conditions</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="index.html" aria-label="FloodWatch home">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M2 6h5l5 15h4l5-15h5" fill="none" stroke="#0B1F33" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M9.5 14h9l-2.5 7h-4z" fill="#3A86DA"/>
+        </svg>
+        <span>flood<span class="wordmark-accent">watch</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#conditions">Conditions</a>
+        <a href="#map-section">Map</a>
+        <a href="#about">About the data</a>
+      </nav>
+      <p class="data-status" id="data-status" aria-live="polite">Loading USGS data…</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="overview" aria-labelledby="summary-heading">
+      <div class="wrap">
+        <p class="eyebrow" id="scope">Des Plaines River &amp; nearby streams · Lake County, IL</p>
+        <h1 id="summary-heading">Local river conditions</h1>
+        <p class="summary" id="summary-text">Getting the latest readings from USGS…</p>
+
+        <div class="feature" id="feature" hidden>
+          <div class="feature-text">
+            <p class="feature-kicker" id="feature-kicker">Closest to its next listed impact</p>
+            <h2 class="feature-name" id="feature-name"></h2>
+            <div class="feature-status" id="feature-status"></div>
+            <dl class="readout" id="feature-readout"></dl>
+            <p class="feature-impact" id="feature-impact"></p>
+            <div class="feature-actions" id="feature-actions"></div>
+          </div>
+          <figure class="feature-figure">
+            <div id="feature-diagram"></div>
+            <figcaption>
+              Scale is the USGS gauge height in feet, not water depth. Dashed lines are the thresholds
+              the National Weather Service lists for this gauge.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="conditions" id="conditions" aria-labelledby="conditions-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="conditions-heading">Gauges</h2>
+          <div class="location-bar">
+            <label for="town-select">Show gauges near</label>
+            <div class="select-wrap">
+              <select id="town-select">
+                <option value="default">Our verified Lake County gauges</option>
+                <option value="lincolnshire">Lincolnshire, IL</option>
+                <option value="buffalo-grove">Buffalo Grove, IL</option>
+                <option value="vernon-hills">Vernon Hills, IL</option>
+                <option value="gurnee">Gurnee, IL</option>
+              </select>
+            </div>
+            <button id="locate-btn" class="btn btn-ghost" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+              Use my location
+            </button>
+          </div>
+        </div>
+        <p id="location-status" class="note" aria-live="polite"></p>
+        <p id="status" class="alert" role="status" hidden></p>
+        <p id="demo-flag" class="demo-flag" hidden>Demo mode: river heights below are simulated, not live.</p>
+
+        <div class="list-head" aria-hidden="true">
+          <span></span><span>Gauge</span><span>Height now</span><span>Room before next listed impact</span><span>Reading</span>
+        </div>
+        <ol class="gauge-list" id="gauge-list" aria-label="River gauges"></ol>
+
+        <p class="legend">
+          <strong>Status</strong> comes from NWS thresholds:
+          <span class="legend-item">Normal: below the action stage</span>
+          <span class="legend-item">Watch: at the action stage or a listed local impact</span>
+          <span class="legend-item">Warning: at flood stage</span>
+          <span class="legend-item">Major: at major flood stage</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="map-section" id="map-section" aria-labelledby="map-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="map-heading">Map</h2>
+          <p class="note">Gauges shown above, colored by status. Select a marker for its reading.</p>
+        </div>
+        <div id="map" class="map" role="region" aria-label="Map of river gauges"></div>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-heading">
+      <div class="wrap about-grid">
+        <div>
+          <h2 id="about-heading">About the data</h2>
+          <p>River heights come from <a href="https://waterdata.usgs.gov/" target="_blank" rel="noopener">USGS stream gauges</a>
+            and refresh every 15 minutes. Flood stages and the street-level impact statements come from the
+            <a href="https://water.noaa.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+          <p><strong>Verified</strong> gauges are the four Lake County gauges whose thresholds our team checked by hand against NWS.
+            Other nearby gauges use NWS data as published.</p>
+          <p>The trend compares the latest reading with the one about three hours earlier. Changes under 0.05 ft count as steady.</p>
+        </div>
+        <div class="emergency">
+          <h2>In an emergency, call 911</h2>
+          <p>FloodWatch is informational only. Always follow official warnings from the NWS and local officials.
+            Your location is only used to find nearby gauges and is never stored.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">FloodWatch · Built by Pratham Rajpal and Sritejas Bommisetty for the 2026 Congressional App Challenge</div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/thresholds.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/nearby.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

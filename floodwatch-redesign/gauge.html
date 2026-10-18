@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FloodWatch: Gauge detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#detail">Skip to gauge detail</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="index.html" aria-label="FloodWatch home">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M2 6h5l5 15h4l5-15h5" fill="none" stroke="#0B1F33" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M9.5 14h9l-2.5 7h-4z" fill="#3A86DA"/>
+        </svg>
+        <span>flood<span class="wordmark-accent">watch</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html#conditions">Conditions</a>
+        <a href="index.html#map-section">Map</a>
+        <a href="index.html#about">About the data</a>
+      </nav>
+      <p class="data-status" id="data-status" aria-live="polite">Loading USGS data…</p>
+    </div>
+  </header>
+
+  <main id="detail">
+    <section class="overview">
+      <div class="wrap">
+        <a class="back-link" href="index.html">&larr; All gauges</a>
+        <p class="eyebrow" id="gauge-eyebrow">USGS gauge</p>
+        <h1 class="detail-title" id="gauge-title">Loading…</h1>
+        <p id="status" class="alert" role="status" hidden></p>
+
+        <div class="feature" id="feature" hidden>
+          <div class="feature-text">
+            <div class="feature-status" id="feature-status"></div>
+            <dl class="readout" id="feature-readout"></dl>
+            <p class="feature-impact" id="feature-impact"></p>
+          </div>
+          <figure class="feature-figure">
+            <div id="feature-diagram"></div>
+            <figcaption>
+              Scale is the USGS gauge height in feet, not water depth. Dashed lines are the thresholds
+              the National Weather Service lists for this gauge.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="chart-section" aria-labelledby="chart-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="chart-heading">Last 7 days</h2>
+          <p class="note">USGS readings, usually every 15 minutes.</p>
+        </div>
+        <div class="chart-box"><canvas id="history-chart" role="img" aria-label="Line chart of gauge height over the last 7 days"></canvas></div>
+        <p class="chart-note" id="chart-note"></p>
+      </div>
+    </section>
+
+    <section class="impacts-section" aria-labelledby="impacts-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="impacts-heading">What happens at each height</h2>
+          <p class="note">Impact statements from the National Weather Service, checked by our team.</p>
+        </div>
+        <ol class="ladder" id="impact-ladder"></ol>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="wrap about-grid">
+        <div>
+          <h2>About this data</h2>
+          <p>Heights come from the USGS gauge and refresh when you reload. Flood categories and impacts come from the
+            <a id="nws-link" href="https://water.noaa.gov/" target="_blank" rel="noopener">National Weather Service</a>.</p>
+        </div>
+        <div class="emergency">
+          <h2>In an emergency, call 911</h2>
+          <p>FloodWatch is informational only. Always follow official warnings from the NWS and local officials.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">FloodWatch · Built by Pratham Rajpal and Sritejas Bommisetty for the 2026 Congressional App Challenge</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/thresholds.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/gauge.js"></script>
+</body>
+</html>
